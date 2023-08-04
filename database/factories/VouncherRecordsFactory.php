@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Product;
+use App\Models\Vouncher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,18 @@ class VouncherRecordsFactory extends Factory
      */
     public function definition(): array
     {
+        $product_id =  Product::all()->random()->id;
+        $each_cost = Product::findOrFail($product_id)->sales_price;
+        $quantity =  rand(10, 20);
+
+
+
         return [
-            //
+            'vouncher_id' => Vouncher::all()->random()->id,
+            'product_id' => $product_id,
+            'product_id' => Product::all()->random()->id,
+            'quantity' => $quantity,
+            'cost' => ($each_cost * $quantity)
         ];
     }
 }

@@ -16,11 +16,11 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
-            $table->enum('role', ['admin', 'stuf'])->default('stuf');
+            $table->enum('role', ['admin', 'stuff'])->default('stuff');
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('otp')->nullable();
-            $table->text('photo')->default(config('info.default_contact_photo'));
+            $table->string('photo')->default(config('info.default_contact_photo'));
 
 
             // $table->enum('membership', ['planet', 'start', 'moon', 'earth', 'premium', 'pro', 'basic'])->default('basic');

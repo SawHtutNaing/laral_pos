@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\brand;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -16,8 +18,21 @@ class ProductFactory extends Factory
      */
     public function definition(): array
     {
+        $unitName = ['bags', 'pack', 'darzon'];
         return [
-            //
+            'name' => fake()->name(),
+            'branch_id' => brand::all()->random()->id,
+            'actually_price' => rand(200, 1000),
+            'sales_price' => rand(200, 1000),
+            'total_stock' => rand(5, 20),
+            'unit' => $unitName[rand(0, 2)],
+            'more_information' => fake()->text(),
+            'user_id' => User::all()->random()->id,
+            'photo' => config('info.default_contact_photo')
+
+
+
+
         ];
     }
 }

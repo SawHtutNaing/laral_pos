@@ -16,34 +16,35 @@ use Illuminate\Support\Facades\Hash;
 
 class ApiAuthController extends Controller
 {
-    // public function register(Request $request): JsonResponse
-    // {
-    //     $request->validate([
-    //         "name" => "required|min:3",
-    //         "email" => "required|email|unique:users",
-    //         "password" => "required"
-    //     ]);
+    public function register(Request $request): JsonResponse
+    {
+        $request->validate([
+            "name" => "required|min:3",
+            "email" => "required|email|unique:users",
+            "password" => "required"
+        ]);
 
-    //     $user = User::create([
-    //         "name" => $request->name,
-    //         "email" => $request->email,
-    //         "password" => Hash::make($request->password)
-    //     ]);
+        $user = User::create([
+            "name" => $request->name,
+            "email" => $request->email,
+            "password" => Hash::make($request->password),
+            "role" => 'stuff'
+        ]);
 
 
-    //     event(new Registered($user));
+        event(new Registered($user));
 
-    //     return response()->json([
-    //         "message" => "User register successful",
-    //     ]);
-    // }
+        return response()->json([
+            "message" => "User register successful",
+        ]);
+    }
 
     public function login(Request $request)
     {
         $request->validate([
 
-            'email' => "required",
-            'password' => "required"
+            'email' => 'required|email',
+            'password' => 'required|min:8|confirmed'
         ]);
         // return $request;
         if (!Auth::attempt($request->only('email', 'password'))) {
@@ -93,7 +94,7 @@ class ApiAuthController extends Controller
     {
         $optCode = rand(111111, 999999);
 
-        $getUsr = User::where('email', '=', $request->email)->firstOrFail();
+        $getUsr = User::where('email', $request->email)->firstOrFail();
         // $getUsr = User::where('email', '=', $request->email)->get();
         // dd($getUsr);
         $getUsr->otp = $optCode;
@@ -110,7 +111,7 @@ class ApiAuthController extends Controller
         $getUsr = User::where('email', '=', $request->email)->firstOrFail();
         if (!$getUsr->otp == $request->otp) {
             return response()->json([
-                'message' => 'Invalid Json'
+                'message' => 'Invalid opt code '
             ]);
         }
         $getUsr->password = $request->new_password;

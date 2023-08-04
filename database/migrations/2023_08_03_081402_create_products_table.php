@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('unit');
             $table->longText('more_information');
             $table->foreignId('user_id');
-            $table->string('photos');
+            $table->string('photo');
 
             $table->timestamps();
         });
