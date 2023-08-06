@@ -5,8 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Vouncher extends Model
+class testone extends Model
 {
     use HasFactory;
-    protected $fillable = ["customer", "vouncher_number", "tax", "net_total", "user_id", "total"];
 }

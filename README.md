@@ -56,3 +56,9 @@ Contact App API for testing
 | `otp` | `string` | **Required**  |
 
 
+ 
+### Delete  Account   (GET)
+need to auth !  
+```http
+   {{base_url}}/delete-account
+```

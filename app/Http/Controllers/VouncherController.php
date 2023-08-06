@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Vouncher;
 use App\Http\Requests\StoreVouncherRequest;
 use App\Http\Requests\UpdateVouncherRequest;
+use App\Http\Resources\VouncherResource;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class VouncherController extends Controller
 {
@@ -13,15 +16,7 @@ class VouncherController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        return Vouncher::all();
     }
 
     /**
@@ -29,24 +24,33 @@ class VouncherController extends Controller
      */
     public function store(StoreVouncherRequest $request)
     {
-        //
+
+        try {
+            $vouncher = Vouncher::create([
+                'customer' => $request->name,
+                'vouncher_number' => fake()->randomNumber(),
+                'tax' => $request->tax,
+                'total' => 0,
+                'net_total' => 0,
+                'user_id' => Auth::id()
+
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+
+        return new VouncherResource($vouncher);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Vouncher $vouncher)
+    public function show($id)
     {
-        //
+        return new VouncherResource(Vouncher::findOrFail($id));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Vouncher $vouncher)
-    {
-        //
-    }
+
 
     /**
      * Update the specified resource in storage.
@@ -59,8 +63,9 @@ class VouncherController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Vouncher $vouncher)
+    public function destroy($id)
     {
-        //
+        Vouncher::findOrFail($id)->delete();
+        return response()->json(['msg' => 'vouncher  is deleted successfuly ']);
     }
 }

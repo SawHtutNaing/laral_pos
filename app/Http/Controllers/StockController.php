@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Stock;
 use App\Http\Requests\StoreStockRequest;
 use App\Http\Requests\UpdateStockRequest;
+use App\Http\Resources\Stock as ResourcesStock;
+use App\Http\Resources\StockCollection;
+use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
@@ -13,23 +16,22 @@ class StockController extends Controller
      */
     public function index()
     {
-        //
+        return new StockCollection(Stock::all());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+
 
     /**
      * Store a newly created resource in storage.
      */
     public function store(StoreStockRequest $request)
     {
-        //
+        Stock::create([
+            'usre_id' => Auth::id(),
+            'product_id' => $request->product_id,
+            'quantity' => $request->quantity,
+            'more' => $request->more
+        ]);
     }
 
     /**

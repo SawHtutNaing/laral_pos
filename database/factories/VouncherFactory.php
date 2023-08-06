@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,13 @@ class VouncherFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'customer' => fake()->name(),
+            'vouncher_number' => fake()->randomNumber(),
+            'total' => 0,
+            'tax' => 5,
+            'net_total' => 0,
+            'user_id' => User::all()->random()->id,
+
         ];
     }
 }
