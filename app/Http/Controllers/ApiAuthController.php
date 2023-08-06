@@ -41,11 +41,11 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-        $request->validate([
+        // $request->validate([
 
-            'email' => 'required|email',
-            'password' => 'required|min:8|confirmed'
-        ]);
+        //     'email' => 'required|email',
+        //     'password' => 'required|min:8|confirmed'
+        // ]);
         // return $request;
         if (!Auth::attempt($request->only('email', 'password'))) {
 

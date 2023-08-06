@@ -21,7 +21,7 @@ class ProductFactory extends Factory
         $unitName = ['bags', 'pack', 'darzon'];
         return [
             'name' => fake()->name(),
-            'branch_id' => brand::all()->random()->id,
+            'brand_id' => brand::all()->random()->id,
             'actually_price' => rand(200, 1000),
             'sales_price' => rand(200, 1000),
             'total_stock' => rand(5, 20),

@@ -26,7 +26,7 @@ class VouncherRecordsFactory extends Factory
 
         return [
             'vouncher_id' => Vouncher::all()->random()->id,
-            'product_id' => $product_id,
+            // 'product_id' => $product_id,
             'product_id' => Product::all()->random()->id,
             'quantity' => $quantity,
             'cost' => ($each_cost * $quantity)
