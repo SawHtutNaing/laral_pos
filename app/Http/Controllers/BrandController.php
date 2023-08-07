@@ -13,6 +13,11 @@ use Illuminate\Support\Facades\Auth;
 
 class BrandController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('isAdmin')->only(['destroy']);
+    }
     /**
      * Display a listing of the resource.
      */
@@ -100,6 +105,8 @@ class BrandController extends Controller
      */
     public function destroy($id)
     {
+        // return Auth::user()->role;
         brand::findOrFail($id)->delete();
+        return response()->json(['msg' => 'brand  is deleted successfuly ']);
     }
 }

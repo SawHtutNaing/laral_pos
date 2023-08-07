@@ -16,6 +16,11 @@ use Illuminate\Support\Facades\Hash;
 
 class ApiAuthController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('isAdmin')->only(['register']);
+    }
+
     public function register(Request $request): JsonResponse
     {
         $request->validate([
@@ -133,10 +138,10 @@ class ApiAuthController extends Controller
         $user = User::findOrFail(Auth::id());
 
         $data = [
-            'current_pw' => $user->CurrentPassword(),
-            'my_contact' => $user->Contacts,
-            'my_fav' => $user->Favourites,
-            'my_search' => $user->SearchRecords
+            // 'current_pw' => $user->CurrentPassword(),
+            // 'my_contact' => $user->Contacts,
+            // 'my_fav' => $user->Favourites,
+            // 'my_search' => $user->SearchRecords
         ];
         return $data;
     }
