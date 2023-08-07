@@ -7,13 +7,14 @@ use App\Http\Requests\StoreStockRequest;
 use App\Http\Requests\UpdateStockRequest;
 use App\Http\Resources\Stock as ResourcesStock;
 use App\Http\Resources\StockCollection;
+use App\Http\Resources\StockResource;
 use Illuminate\Support\Facades\Auth;
 
 class StockController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['destroy']);
+        $this->middleware('isAdmin')->only(['destroy', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -30,43 +31,66 @@ class StockController extends Controller
      */
     public function store(StoreStockRequest $request)
     {
-        Stock::create([
-            'usre_id' => Auth::id(),
-            'product_id' => $request->product_id,
-            'quantity' => $request->quantity,
-            'more' => $request->more
-        ]);
+        logger("i am stock store");
+        // $stock = Stock::create([
+        //     'user_id' => Auth::id(),
+        //     'product_id' => $request->product_id,
+        //     'quantity' => $request->quantity,
+        //     'more' => $request->more
+        // ]);
+        // return new StockResource($stock);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Stock $stock)
+    public function show($id)
     {
-        //
+        return new StockResource(Stock::findOrFail($id));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Stock $stock)
-    {
-        //
-    }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateStockRequest $request, Stock $stock)
+    public function update(UpdateStockRequest $request, $id)
     {
-        //
+        $stock = Stock::findOrFail($id);
+
+
+
+        if (is_null($stock)) {
+            return response()->json([
+                'message' => 'brand not found'
+            ], 404);
+        }
+
+        if ($request->has('product_id')) {
+            $stock->product_id  = $request->product_id;
+        }
+        if ($request->has('quantity')) {
+            $stock->quantity  = $request->quantity;
+        }
+        if ($request->has('more')) {
+            $stock->more  = $request->more;
+        }
+
+
+
+
+
+        $stock->update();
+
+
+        return new StockResource($stock);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Stock $stock)
+    public function destroy($id)
     {
-        //
+        Stock::findOrFail($id)->delete();
+        return response()->json(['msg' => 'stock is deleted successfuly ']);
     }
 }

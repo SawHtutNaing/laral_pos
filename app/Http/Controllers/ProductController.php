@@ -17,7 +17,7 @@ class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['destroy']);
+        $this->middleware('isAdmin')->only(['destroy', 'update']);
     }
 
     /**
@@ -36,29 +36,13 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreProductRequest $request)
     {
-        // return $request;
-
-        // try {
-        //     Product::create(
-        //         [
-        //             "name" => $request->name,
-        //             "brand_id" => $request->brand_id,
-        //             "actually_price" => $request->actually_price,
-        //             "sales_price" => $request->sales_price,
-        //             "total_stock" => $request->total_stock,
-        //             "unit" => $request->unit,
-        //             "more_information" => $request->more_information,
-        //             "user_id" => Auth::id(),
-        //             "photo" => "dsdsd"
-
-        //         ]
-        //     );
-        // } catch (Exception $e) {
-        //     return $e;
-        // }
-
+        $check = Product::where('name', $request->name)->where("brand_id", $request->brand_id)->first();
+        if ($check) {
+            return  response()->json(['msg' => "this product is already in store"]);
+            // return $check;
+        }
         $product =  Product::create(
             [
                 "name" => $request->name,
@@ -74,20 +58,29 @@ class ProductController extends Controller
             ]
         );
 
-        try {
-            Stock::create([
-                'user_id' => Auth::id(),
-                'product_id' => $product->id,
-                'quantity' => $product->total_stock,
-                'more' => $product->more_information
-            ]);
-        } catch (Exception $e) {
-            return $e;
-        }
+
+
+        $stock =  Stock::create([
+            'user_id' => Auth::id(),
+            'product_id' => $product->id,
+            'quantity' => $product->total_stock,
+            'more' => $product->more_information
+        ]);
+
+
         // redirect()->route('stock.store', ['product_id' => $product->id, 'quantity' => $product->total_stock, 'more' => $product->more_information]);
+        // route('stock.store');
 
 
-        return new ProductResource($product);
+
+        $data = [
+            'model1' => $product,
+            'model2' => $stock,
+        ];
+        // return $data;
+
+        return new ProductResource($data);
+        // return response()->json(['msg' => 'stock dispaly log successfuly ']);
     }
 
 
@@ -151,6 +144,17 @@ class ProductController extends Controller
         }
 
         return new ProductResource($product);
+    }
+
+
+    public function SaleProduct(Request $request)
+    {
+        // return "kkkk";
+
+        $product = Product::findOrFail($request->product_id);
+        $product->total_stock -= $request->quantity;
+        $product->update();
+        return $product;
     }
 
     /**

@@ -15,7 +15,7 @@ class VouncherRecordsController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['destroy']);
+        $this->middleware('isAdmin')->only(['destroy', 'update']);
     }
     /**
      * Display a listing of the resource.
@@ -33,6 +33,9 @@ class VouncherRecordsController extends Controller
     {
         $product = Product::findOrFail($request->product_id);
         $cost = $product->sales_price * $request->quantity;
+        if ($request->quantity >  $product->total_stock) {
+            return response()->json(['alert' => 'not enough stock']);
+        }
         $product->total_stock -= $request->quantity;
         $product->update();
         $VouncherRecord =   VouncherRecords::create([

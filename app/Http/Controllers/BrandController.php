@@ -16,7 +16,7 @@ class BrandController extends Controller
 
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['destroy']);
+        $this->middleware('isAdmin')->only(['destroy', 'update', 'store']);
     }
     /**
      * Display a listing of the resource.

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('unit');
             $table->longText('more_information');
             $table->foreignId('user_id');
-            $table->longText('photo')->default(config('info.default_contact_photo'));
+            $table->string('photo')->default(config('info.default_contact_photo'));
             $table->timestamps();
         });
     }

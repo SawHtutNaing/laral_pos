@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -12,20 +13,13 @@ class ProductResource extends JsonResource
      *
      * @return array<string, mixed>
      */
-    public function toArray(Request $request): array
+    public function toArray(Request $request)
     {
-        // return [
-        //     'name' => $this->name,
-        //     'branch_id' => $this->branch_id,
-        //     'actually_price' => $this->actually_price,
-        //     'sales_price' => $this->sales_price,
-        //     'total_stock' => $this->total_stock,
-        //     'unit' => $this->unit,
-        //     'more_information' => $this->more_information,
-        //     'user_id' => $this->user_id,
-        //     'photo' => $this->photo,
+        // return "dd";
+        return [
+            'new_product_info' =>  parent::toArray($request)['model1'],
+            'new_created_stock_info' =>  parent::toArray($request)['model2']
 
-        // ];
-        return parent::toArray($request);
+        ];
     }
-}
+};

@@ -32,17 +32,19 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('brand', BrandController::class);
         // Route::delete('brand/{id}', 'BrandController@destroy')->middleware('isAdmin');
         Route::apiResource('product', ProductController::class);
-        Route::apiResource('stock', StockController::class)->only(['index', 'store']);
+        Route::post('product/sale_product', [ProductController::class, 'SaleProduct']);
+        // Route::apiResource('stock', StockController::class)->only(['index', 'store']);
+        Route::apiResource('stock', StockController::class);
         Route::apiResource('vouncher', VouncherController::class);
         Route::apiResource('vouncher-record', VouncherRecordsController::class);
         Route::get('devices', [ApiAuthController::class, 'devices']);
         Route::get('delete-account', [ApiAuthController::class, 'Delgit addd .eteAccount']);
+        Route::post('reset', [ApiAuthController::class, 'reset']);
+        Route::post('new-pw', [ApiAuthController::class, 'newPw']);
+        Route::get('logout', [ApiAuthController::class, 'logout']);
+        Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
     });
 
 
     Route::post("login", [ApiAuthController::class, 'login']);
-    Route::post('reset', [ApiAuthController::class, 'reset']);
-    Route::post('new-pw', [ApiAuthController::class, 'newPw']);
-    Route::get('logout', [ApiAuthController::class, 'logout']);
-    Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
 });

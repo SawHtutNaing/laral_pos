@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class VouncherResource extends JsonResource
+class StockResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -14,12 +14,6 @@ class VouncherResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        // return $this->vouncher;
-        return [
-            'vouncher_data' => parent::toArray($request),
-            'children_vounchers' => $this->children_vounchers
-
-
-        ];
+        return parent::toArray($request);
     }
 }
