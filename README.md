@@ -73,12 +73,35 @@
 
 ### Sales (POST)
 
+| cus_name | tax |
+| :------- | :-- |
+| ko aung  | 5   |
+
 | product_id | quantity |
 | :--------- | :------- |
 | 1          | 20       |
-|            |          |
+| 2          | 20       |
+| 5          | 20       |
 
 > 📘 it will return a array of product model and its total_stock is update . When Sales routes is called ..
+> 
+> you need to put the cus_name and tax once then put the product_id and quantity .
+> 
+> ```json
+> {
+>     "info": {
+>         "cus_name": "ko mg mg ",
+>         "tax": 5
+>     },
+>     "data": [
+>         {
+>             "product_id": 101,
+>             "quantity": 20
+>         }
+>     ]
+> }
+> 
+> ```
 > 
 > - [ ] update the stock
 > - [ ] create the voucher

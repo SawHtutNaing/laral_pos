@@ -7,11 +7,15 @@ use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductResource;
+use App\Http\Resources\VouncherResource;
 use App\Models\Stock;
+use App\Models\Vouncher;
+use App\Models\VouncherRecords;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use PhpParser\Node\Stmt\TryCatch;
+use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
@@ -102,14 +106,24 @@ class ProductController extends Controller
     public function update(UpdateProductRequest $request, $id)
     {
         $product = Product::findOrFail($id);
-
-
-
         if (is_null($product)) {
             return response()->json([
                 'message' => 'brand not found'
             ], 404);
         }
+
+        if ($request->mood == 1) {
+            $add = $request->total_stock -  $product->total_stock;
+
+            Stock::create([
+                'user_id' => Auth::id(),
+                'product_id' => $product->id,
+                'quantity' => $add,
+                'more' => $request->more_information
+            ]);
+        }
+
+
 
         if ($request->has('name')) {
             $product->name  = $request->name;
@@ -132,29 +146,55 @@ class ProductController extends Controller
         }
 
 
+
         $product->update();
-        if ($request->mood == 1) {
 
-            Stock::create([
-                'user_id' => Auth::id(),
-                'product_id' => $product->id,
-                'quantity' => $product->total_stock,
-                'more' => $product->more_information
-            ]);
-        }
-
-        return new ProductResource($product);
+        // return new ProductResource($product);
+        return $product;
     }
 
 
     public function SaleProduct(Request $request)
     {
-        // return "kkkk";
 
-        $product = Product::findOrFail($request->product_id);
-        $product->total_stock -= $request->quantity;
-        $product->update();
-        return $product;
+
+        $jsonData = json_decode($request->getContent(), true);
+        $info = $jsonData['info'];
+        $data = $jsonData['data'];
+
+        $vouncher = Vouncher::create([
+            'customer' => $info['cus_name'],
+            "vouncher_number" => Str::uuid()->toString(),
+            'total' => 0,
+            'tax' =>  $info['tax'],
+            'net_total' => 0,
+            'user_id' => Auth::id()
+        ]);
+
+        foreach ($data as $each) {
+            $product = Product::findOrFail($each['product_id']);
+            if ($each['quantity'] >  $product->total_stock) {
+                return response()->json(['alert' => 'not enough stock']);
+            }
+
+            $product->total_stock -= $each['quantity'];
+            $product->update();
+
+            $vouncher_record = VouncherRecords::create([
+                'vouncher_id' => $vouncher->id,
+                "product_id" => $each['product_id'],
+                "cost" => $product->sales_price,
+
+                "quantity" => $each['quantity']
+            ]);
+
+            $vouncher->total +=  $vouncher_record->cost;
+            $vouncher->net_total += $vouncher_record->cost  + ($vouncher_record->cost  * ($vouncher->tax / 100));
+
+            $vouncher->update();
+        };
+
+        return new VouncherResource($vouncher);
     }
 
     /**
