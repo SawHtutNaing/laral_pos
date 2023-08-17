@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\brand;
+use App\Models\Brand;
 use App\Http\Requests\StorebrandRequest;
 use App\Http\Requests\UpdatebrandRequest;
 use App\Http\Resources\BrandCollection;
@@ -23,7 +23,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        return new BrandCollection(brand::all());
+        return new BrandCollection(Brand::all());
     }
 
 
@@ -45,7 +45,7 @@ class BrandController extends Controller
         // return $ok;
         // $brand = brand::create($ok);
         // return new BrandResource($brand);
-        $brand = brand::create([
+        $brand = Brand::create([
             "name" => $request->name,
             "company" => $request->company,
             "information" => $request->information,
@@ -71,7 +71,7 @@ class BrandController extends Controller
     public function update(UpdatebrandRequest $request, $id)
     {
 
-        $brand = brand::findOrFail($id);
+        $brand = Brand::findOrFail($id);
 
 
 
@@ -106,7 +106,7 @@ class BrandController extends Controller
     public function destroy($id)
     {
         // return Auth::user()->role;
-        brand::findOrFail($id)->delete();
+        Brand::findOrFail($id)->delete();
         return response()->json(['msg' => 'brand  is deleted successfuly ']);
     }
 }
