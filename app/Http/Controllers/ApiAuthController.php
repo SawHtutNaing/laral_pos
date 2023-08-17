@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Photo;
 use Illuminate\Auth\Events\Registered;
 
 
@@ -18,7 +19,7 @@ class ApiAuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['register']);
+        $this->middleware('isAdmin')->only(['register', 'allUsers']);
     }
 
     public function register(Request $request): JsonResponse
@@ -26,21 +27,44 @@ class ApiAuthController extends Controller
         $request->validate([
             "name" => "required|min:3",
             "email" => "required|email|unique:users",
-            "password" => "required"
+            "password" => "required",
+            'phone' => 'required',
+        ]);
+
+        $savedProfilePic = null;
+        $fileExt = null;
+        $fileName = null;
+        if ($request->hasFile('profile_pic')) {
+            $fileExt =  $request->file('profile_pic')->extension();
+            $fileName = $request->file('profile_pic')->getClientOriginalName();
+            $savedProfilePic = $request->file("profile_pic")->store("public/profile_pics");
+        }
+
+        Photo::create([
+            'url' => $savedProfilePic,
+            'extension' => $fileExt,
+            'name' => $fileName,
+            'user_id' => Auth::id()
         ]);
 
         $user = User::create([
             "name" => $request->name,
             "email" => $request->email,
+            'phone' => $request->phone,
+            "address" => $request->address,
+            "dob" => $request->dob,
+            "gender" => $request->gender,
+
             "password" => Hash::make($request->password),
-            "role" => 'stuff'
+            // "role" => 'stuff',
+            'photo' => $savedProfilePic,
         ]);
 
 
-        event(new Registered($user));
+        // event(new Registered($user));
 
         return response()->json([
-            "message" => "User register successful",
+            "message" => $user
         ]);
     }
 
@@ -126,6 +150,11 @@ class ApiAuthController extends Controller
         ]);
     }
 
+    public function Update(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+    }
+
     public function makeVerify(Request $request)
     {
         return $request;
@@ -137,15 +166,19 @@ class ApiAuthController extends Controller
 
         $user = User::findOrFail(Auth::id());
 
-        $data = [
-            // 'current_pw' => $user->CurrentPassword(),
-            // 'my_contact' => $user->Contacts,
-            // 'my_fav' => $user->Favourites,
-            // 'my_search' => $user->SearchRecords
-        ];
-        return $data;
+        // $data = [
+        //     // 'current_pw' => $user->CurrentPassword(),
+        //     // 'my_contact' => $user->Contacts,
+        //     // 'my_fav' => $user->Favourites,
+        //     // 'my_search' => $user->SearchRecords
+        // ];
+        return $user;
     }
 
+    public function allUsers()
+    {
+        return User::all();
+    }
     public function DeleteAccount()
     {
         foreach (Auth::user()->tokens as $token) {

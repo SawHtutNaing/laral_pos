@@ -93,7 +93,8 @@ class ProductController extends Controller
      */
     public function show($id)
     {
-        return new ProductResource(Product::findOrFail($id));
+        // return new ProductResource(Product::findOrFail($id));
+        return Product::findOrFail($id);
     }
 
     /**
@@ -171,6 +172,7 @@ class ProductController extends Controller
             'user_id' => Auth::id()
         ]);
 
+        $record_for_items = [];
         foreach ($data as $each) {
             $product = Product::findOrFail($each['product_id']);
             if ($each['quantity'] >  $product->total_stock) {
@@ -180,19 +182,31 @@ class ProductController extends Controller
             $product->total_stock -= $each['quantity'];
             $product->update();
 
-            $vouncher_record = VouncherRecords::create([
+            // $vouncher_record = VouncherRecords::create([
+            //     'vouncher_id' => $vouncher->id,
+            //     "product_id" => $each['product_id'],
+            //     "cost" => $product->sales_price,
+
+            //     "quantity" => $each['quantity']
+            // ]);
+            $vouncher_record = [
                 'vouncher_id' => $vouncher->id,
                 "product_id" => $each['product_id'],
                 "cost" => $product->sales_price,
 
                 "quantity" => $each['quantity']
-            ]);
-
-            $vouncher->total +=  $vouncher_record->cost;
-            $vouncher->net_total += $vouncher_record->cost  + ($vouncher_record->cost  * ($vouncher->tax / 100));
-
+            ];
+            // $vouncher->total +=  $vouncher_record->cost;
+            $vouncher->total +=  $vouncher_record['cost'];
+            // $vouncher->net_total += $vouncher_record->cost  + ($vouncher_record->cost  * ($vouncher->tax / 100));
+            $vouncher->net_total += $vouncher_record['cost']  + ($vouncher_record['cost']  * ($vouncher->tax / 100));
+            array_push(
+                $record_for_items,
+                $vouncher_record
+            );
             $vouncher->update();
         };
+        VouncherRecords::insert($record_for_items);
 
         return new VouncherResource($vouncher);
     }

@@ -14,6 +14,9 @@ return new class extends Migration
         Schema::create('photos', function (Blueprint $table) {
             $table->id();
             $table->string('url');
+            $table->string('name');
+            $table->string('extension');
+            $table->string('user_id');
             $table->timestamps();
         });
     }

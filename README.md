@@ -195,6 +195,16 @@
 
 {{base_url}}/user/devices
 
+### get profile (GET)
+
+{{base_url}}/user/user-profile
+
+### get profile (GET) only for admin usr
+
+{{base_url}}/user/all-users 
+
+
+
 ### reset pw (POST)
 
 | email                                 |
@@ -213,3 +223,13 @@
 {{base_url}}/user/logout (GET)
 
 {{base_url}}/user/logout-all (GET)
+
+
+## media 
+
+### all media 
+{{base_url}}/user/photo
+
+### delete media (for admin)
+
+{{base_url}}/user/photo/{id}

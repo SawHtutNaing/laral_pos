@@ -13,7 +13,7 @@ class PhotoController extends Controller
      */
     public function index()
     {
-        //
+        return Photo::all();
     }
 
     /**
@@ -59,8 +59,12 @@ class PhotoController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Photo $photo)
+    public function destroy($id)
     {
-        //
+
+
+
+
+        Photo::findOrFail($id)->delete();
     }
 }
