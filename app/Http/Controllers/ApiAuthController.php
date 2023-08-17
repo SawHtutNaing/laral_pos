@@ -19,16 +19,20 @@ class ApiAuthController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['register', 'allUsers']);
+        $this->middleware('isAdmin')->only(['register', 'allUsers', 'DeleteAccount', 'BanUser']);
     }
 
     public function register(Request $request): JsonResponse
     {
         $request->validate([
-            "name" => "required|min:3",
-            "email" => "required|email|unique:users",
-            "password" => "required",
-            'phone' => 'required',
+            'brand_id' => 'required|exists:brands,id',
+            'actually_price' => 'required|integer|min:0',
+            'sales_price' => 'required|integer|min:0',
+            'total_stock' => 'required|integer|min:0',
+            'unit' => 'required|string',
+            'more_information' => 'nullable|string',
+
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:3000',
         ]);
 
         $savedProfilePic = null;
@@ -70,12 +74,21 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-        // $request->validate([
+        $request->validate([
 
-        //     'email' => 'required|email',
-        //     'password' => 'required|min:8|confirmed'
-        // ]);
-        // return $request;
+            'email' => 'required|email',
+            'password' => 'required|min:3'
+        ]);
+
+        $user = User::where('email', $request->email)->first();
+        if ($user->isBan) {
+            return response()->json(
+                [
+                    'message' => "Sorry you are banned "
+                ],
+                200
+            );
+        }
         if (!Auth::attempt($request->only('email', 'password'))) {
 
             return response()->json(
@@ -121,6 +134,7 @@ class ApiAuthController extends Controller
 
     public  function reset(Request $request): JsonResponse
     {
+
         $optCode = rand(111111, 999999);
 
         $getUsr = User::where('email', $request->email)->firstOrFail();
@@ -152,12 +166,62 @@ class ApiAuthController extends Controller
 
     public function Update(Request $request, $id)
     {
+
+
         $user = User::findOrFail($id);
+        if (is_null($user)) {
+            return response()->json([
+                'message' => 'user not found'
+            ], 404);
+        }
+        // $request->name ?? $user->name = $request->name;
+        // $request->phone ?? $user->phone = $request->phone;
+        // $request->address  ?? $user->address  = $request->address;
+        // $request->dob ?? $user->dob = $request->dob;
+        // $request->gender ?? $user->gender = $request->gender;
+        // $request->email ?? $user->email = $request->email;
+        // $request->photo ?? $user->photo = $request->photo;
+        if ($request->has('name')) {
+            $user->name = $request->name;
+        }
+
+        if ($request->has('phone')) {
+            $user->phone = $request->phone;
+        }
+        if ($request->has('address')) {
+            $user->address = $request->address;
+        }
+        if ($request->has('dob')) {
+            $user->dob = $request->dob;
+        }
+        if ($request->has('gender')) {
+            $user->gender = $request->gender;
+        }
+        if ($request->has('email')) {
+            $user->email = $request->email;
+        }
+        if ($request->has('photo')) {
+            $user->photo = $request->photo;
+        }
+
+
+        $user->update();
+        return $user;
     }
 
     public function makeVerify(Request $request)
     {
         return $request;
+    }
+
+    public function BanUser(Request $request)
+    {
+        $id = $request->id;
+
+        $user = User::findOrFail($id);
+        $user->isBan = !$user->isBan;
+        $user->update();
+        return $user;
     }
 
 
@@ -177,7 +241,7 @@ class ApiAuthController extends Controller
 
     public function allUsers()
     {
-        return User::all();
+        return User::paginate(5)->withQueryString();
     }
     public function DeleteAccount()
     {

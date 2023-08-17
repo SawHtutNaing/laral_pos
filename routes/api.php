@@ -46,7 +46,8 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('vouncher-record', VouncherRecordsController::class);
         Route::get('devices', [ApiAuthController::class, 'devices']);
         Route::get('delete-account', [ApiAuthController::class, 'DeleteAccount']);
-        Route::get('update', [ApiAuthController::class, 'Update']);
+        Route::post('update/{id}', [ApiAuthController::class, 'Update']);
+        Route::post('ban-user', [ApiAuthController::class, 'BanUser']);
         Route::get('user-profile', [ApiAuthController::class, 'userProfile']);
         Route::get('all-users', [ApiAuthController::class, 'allUsers']);
         Route::post('reset', [ApiAuthController::class, 'reset']);

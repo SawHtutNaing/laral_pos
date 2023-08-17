@@ -21,7 +21,7 @@ class StockController extends Controller
      */
     public function index()
     {
-        return new StockCollection(Stock::all());
+        return new StockCollection(Stock::paginate(5)->withQueryString());
     }
 
 

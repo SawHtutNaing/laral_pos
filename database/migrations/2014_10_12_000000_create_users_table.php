@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('address');
             $table->string('dob');
+            $table->boolean('isBan')->default(0);
             $table->enum('role', ['admin', 'stuff'])->default('stuff');
             $table->enum('gender', ['male', 'female']);
             $table->string('email')->unique();

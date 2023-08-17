@@ -51,9 +51,9 @@
 
 > {{base_url}}/user/product
 
-| name           | brand_id | actually_price | sales_price | total_stock | unit | more_information   |
-| :------------- | :------- | :------------- | :---------- | :---------- | :--- | :----------------- |
-| instant noddle | 1        | 700            | 1000        | 50          | bags | kan san mal pr tee |
+| name           | brand_id | actually_price | sales_price | total_stock | unit | more_information   || photo   |
+| :------------- | :------- | :------------- | :---------- | :---------- | :--- | :----------------- || :----------------- |
+| instant noddle | 1        | 700            | 1000        | 50          | bags | kan san mal pr tee || filePath |
 
 ### store( POST)
 
@@ -63,11 +63,11 @@
 | :------------- | :------- | :------------- | :---------- | :---------- | :--- | :--------------- |
 | instant noddle | 2        | 800            | 1100        | 100         | bags | No extra info    |
 
-### delete (DELETE))
+### delete (DELETE)
 
 > {{base_url}}/user/product/{id}
 
-### show (GET))
+### show (GET)
 
 > {{base_url}}/user/product/{id}
 
@@ -181,9 +181,20 @@
 
 ### create(register) (POST)
 
-| name  | email                                   | password | | profile_pic |   | phone    |       | address    |
-| :---- | :-------------------------------------- | :------- |  | :-------   | |:-------    |       | :-------    |      
-| ko ko | [koko@gmail.com](mailto:koko@gmail.com) | password |  | url        |   | 09xxxxxxxx |     | Yangon , Yankin    |
+| name  | email                                   | password | | profile_pic || phone      || address        || gender   || dob        |   
+| :---- | :-------------------------------------- | :------- |  | :-------   ||:-------    || :-------       || :------- | | :-------  |   
+| ko ko | [koko@gmail.com](mailto:koko@gmail.com) | password |  | url        || 09xxxxxxxx || Yangon , Yankin|| male     || 11-11-11   |   
+
+
+
+### update(register) (POST)
+
+| name  | email                                   | password | | profile_pic || phone      || address        || gender   || dob        |   
+| :---- | :-------------------------------------- | :------- |  | :-------   ||:-------    || :-------       || :------- | | :-------  |   
+| ko ko | [koko@gmail.com](mailto:koko@gmail.com) | password |  | url        || 09xxxxxxxx || Yangon , Yankin|| male     || 11-11-11   |   
+
+
+
 
 ### deletet account (DELETE)
 
@@ -194,6 +205,14 @@
 ### get all devices (GET)
 
 {{base_url}}/user/devices
+
+
+### Ban User (admin only) (POST)
+
+| id                                 |
+| :------------------------------------ |
+| user_id |
+
 
 ### get profile (GET)
 
@@ -233,3 +252,12 @@
 ### delete media (for admin)
 
 {{base_url}}/user/photo/{id}
+
+
+
+### store (POST)
+
+| images                                 |
+| :------------------------------------  |
+| file[]                                 |
+

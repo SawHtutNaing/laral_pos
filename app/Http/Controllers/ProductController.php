@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\VouncherResource;
+use App\Models\Photo;
 use App\Models\Stock;
 use App\Models\Vouncher;
 use App\Models\VouncherRecords;
@@ -29,7 +30,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return new BrandCollection(Product::all());
+        return new BrandCollection(Product::paginate(5)->withQueryString());
     }
 
     /**
@@ -41,12 +42,40 @@ class ProductController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreProductRequest $request)
+
     {
+
         $check = Product::where('name', $request->name)->where("brand_id", $request->brand_id)->first();
         if ($check) {
             return  response()->json(['msg' => "this product is already in store"]);
             // return $check;
         }
+
+        // $savedProductPhoto = null;
+        // $fileExt = null;
+        // $fileName = null;
+        // $fileSize = null;
+        $photo = null;
+        if ($request->hasFile('photo')) {
+
+            $fileExt =  $request->file('photo')->extension();
+            $fileName = $request->file('photo')->getClientOriginalName();
+            $savedProductPhoto = $request->file("photo")->store("public/product_img");
+            $fileSize =    $request->file('photo')->getSize();
+
+            $photo  =  Photo::create([
+                'url' => $savedProductPhoto,
+                'extension' => $fileExt,
+                'name' => $fileName,
+                'file_size' =>  $fileSize,
+
+                'user_id' => Auth::id()
+            ]);
+        }
+
+
+
+
         $product =  Product::create(
             [
                 "name" => $request->name,
@@ -57,7 +86,8 @@ class ProductController extends Controller
                 "unit" => $request->unit,
                 "more_information" => $request->more_information,
                 "user_id" => Auth::id(),
-                "photo" => "dsdsd"
+                "photo" => $photo->url,
+
 
             ]
         );
@@ -157,6 +187,7 @@ class ProductController extends Controller
 
     public function SaleProduct(Request $request)
     {
+
 
 
         $jsonData = json_decode($request->getContent(), true);
