@@ -21,6 +21,10 @@ class UserFactory extends Factory
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),
             'email_verified_at' => now(),
+            'phone' => '09xxxxxxxxx',
+            'gender' => 'male',
+            'dob' => '11-11-11',
+            'address' => 'yangon',
             'password' => '1111',
             'remember_token' => Str::random(10),
         ];

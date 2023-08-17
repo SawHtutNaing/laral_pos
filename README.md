@@ -181,9 +181,9 @@
 
 ### create(register) (POST)
 
-| name  | email                                   | password |
-| :---- | :-------------------------------------- | :------- |
-| ko ko | [koko@gmail.com](mailto:koko@gmail.com) | password |
+| name  | email                                   | password | | profile_pic |   | phone    |       | address    |
+| :---- | :-------------------------------------- | :------- |  | :-------   | |:-------    |       | :-------    |      
+| ko ko | [koko@gmail.com](mailto:koko@gmail.com) | password |  | url        |   | 09xxxxxxxx |     | Yangon , Yankin    |
 
 ### deletet account (DELETE)
 
