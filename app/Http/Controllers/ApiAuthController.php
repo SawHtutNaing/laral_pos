@@ -99,7 +99,15 @@ class ApiAuthController extends Controller
             );
         }
 
-        return Auth::user()->createToken("iphone");
+        $token = Auth::user()->createToken("iphone");
+
+        return response()->json(
+            [
+                'access_token' =>  $token->plainTextToken,
+                'login_as' => Auth::user()
+            ],
+            200
+        );
     }
 
     public function logout(): JsonResponse

@@ -7,6 +7,7 @@ use App\Http\Requests\StorePhotoRequest;
 use App\Http\Requests\UpdatePhotoRequest;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\TryCatch;
 
 class PhotoController extends Controller
@@ -62,11 +63,14 @@ class PhotoController extends Controller
         if ($files = $request->file('images')) {
             foreach ($files as $file) {
 
+                $url =  asset(Storage::url($file->store("public/media")));
+                // dd($url);
                 $arr = [
                     'extension' =>  $file->extension(),
                     'file_size' =>  $file->getSize(),
                     'name' => $file->getClientOriginalName(),
-                    'url' => $file->store("public/media"),
+                    'url' => $url,
+
                     'created_at' => now(),
                     'updated_at' => now(),
                     'user_id' => Auth::id()
