@@ -103,8 +103,8 @@ class ApiAuthController extends Controller
 
         return response()->json(
             [
-                'access_token' =>  $token->plainTextToken,
-                'login_as' => Auth::user()
+                'token' =>  $token->plainTextToken,
+                'suer' => Auth::user()
             ],
             200
         );
