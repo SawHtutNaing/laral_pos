@@ -32,7 +32,7 @@ Route::prefix('v1')->group(function () {
         'test',
         // fn () => Storage()
     );
-    Route::middleware('auth:sanctum')->prefix('user')->group(function () {
+    Route::prefix('user')->group(function () {
 
         Route::post('register', [ApiAuthController::class, 'Register']);
         Route::apiResource('brand', BrandController::class);

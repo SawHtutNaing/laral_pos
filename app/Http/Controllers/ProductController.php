@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
 use App\Http\Resources\BrandCollection;
+use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
 use App\Http\Resources\VouncherResource;
 use App\Models\Photo;
@@ -15,6 +16,7 @@ use App\Models\VouncherRecords;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PhpParser\Node\Stmt\TryCatch;
 use Illuminate\Support\Str;
 
@@ -30,7 +32,16 @@ class ProductController extends Controller
      */
     public function index()
     {
-        return new BrandCollection(Product::paginate(5)->withQueryString());
+        // return  "hello this is products lsit ";
+        // return response()->json([
+        //     'message' => 'hello all '
+        // ]);
+
+        // return "ehllo this is products";
+        // return Product::latest()->paginate(5)->withQueryString();
+        return Product::all();
+        // return new ProductCollection(Product::latest()->paginate(5)->withQueryString());
+        // return Product::latest()->paginate(5)->withQueryString();
     }
 
     /**
@@ -44,6 +55,7 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
 
     {
+        // return $request;
 
         $check = Product::where('name', $request->name)->where("brand_id", $request->brand_id)->first();
         if ($check) {
@@ -55,12 +67,14 @@ class ProductController extends Controller
         // $fileExt = null;
         // $fileName = null;
         // $fileSize = null;
+
+
         $photo = null;
         if ($request->hasFile('photo')) {
-
+            // dd("thisis");
             $fileExt =  $request->file('photo')->extension();
             $fileName = $request->file('photo')->getClientOriginalName();
-            $savedProductPhoto = $request->file("photo")->store("public/product_img");
+            $savedProductPhoto =  asset(Storage::url($request->file('photo')->store("public/media")));
             $fileSize =    $request->file('photo')->getSize();
 
             $photo  =  Photo::create([
@@ -72,6 +86,7 @@ class ProductController extends Controller
                 'user_id' => Auth::id()
             ]);
         }
+
 
 
 

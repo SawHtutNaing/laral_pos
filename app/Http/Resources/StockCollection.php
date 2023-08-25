@@ -14,11 +14,13 @@ class StockCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
+        dd(
+            $this->collection
+
+        );
         return [
-            'data' => $this->collection,
-            'links' => [
-                'self' => 'link-value',
-            ]
+            'stocks' => $this->collection
+
         ];
     }
 }

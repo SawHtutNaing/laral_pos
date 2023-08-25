@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
@@ -14,11 +15,17 @@ class ProductCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        return [
-            'data' => $this->collection,
-            'links' => [
-                'self' => 'link-value',
-            ]
-        ];
+        // dd($this->collection);
+        // dd(
+        //     $this->collection
+
+        // );
+        try {
+            return [
+                'products' => $this->collection,
+            ];
+        } catch (Exception $e) {
+            return $e;
+        }
     }
 }
