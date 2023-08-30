@@ -36,7 +36,7 @@ class ProductController extends Controller
 
 
         // return new ProductCollection(Product::paginate(5)->withQueryString());
-        return  Product::paginate(5)->withQueryString();
+        return  Product::paginate(8)->withQueryString();
     }
 
     /**

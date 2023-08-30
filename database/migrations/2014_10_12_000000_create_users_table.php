@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->integer('otp')->nullable();
-            $table->timestamp('closed_time')->nullable();
+
             $table->string('photo')->default(config('info.default_contact_photo'));
 
 

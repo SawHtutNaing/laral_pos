@@ -109,8 +109,9 @@ class RecentController extends Controller
 
         ]);
 
-        return $dailyRecord;
         $user = User::where('id', Auth::id());
         $user->closed_time = Carbon::tomorrow();
+        $user->update();
+        return $dailyRecord;
     }
 }
