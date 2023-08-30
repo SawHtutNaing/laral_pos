@@ -5,26 +5,27 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Http\Requests\StoreProductRequest;
 use App\Http\Requests\UpdateProductRequest;
-use App\Http\Resources\BrandCollection;
 use App\Http\Resources\ProductCollection;
 use App\Http\Resources\ProductResource;
+
 use App\Http\Resources\VouncherResource;
 use App\Models\Photo;
 use App\Models\Stock;
 use App\Models\Vouncher;
 use App\Models\VouncherRecords;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use PhpParser\Node\Stmt\TryCatch;
+
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('isAdmin')->only(['destroy', 'update']);
+        // $this->middleware('isAdmin')->only(['destroy', 'update']);
     }
 
     /**
@@ -32,16 +33,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        // return  "hello this is products lsit ";
-        // return response()->json([
-        //     'message' => 'hello all '
-        // ]);
 
-        // return "ehllo this is products";
-        // return Product::latest()->paginate(5)->withQueryString();
-        return Product::all();
-        // return new ProductCollection(Product::latest()->paginate(5)->withQueryString());
-        // return Product::latest()->paginate(5)->withQueryString();
+
+        // return new ProductCollection(Product::paginate(5)->withQueryString());
+        return  Product::paginate(5)->withQueryString();
     }
 
     /**
@@ -202,7 +197,9 @@ class ProductController extends Controller
 
     public function SaleProduct(Request $request)
     {
-
+        if (Auth::user()->closed_time > Carbon::today()) {
+            return 'sales is opened tomorrow';
+        }
 
 
         $jsonData = json_decode($request->getContent(), true);

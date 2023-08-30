@@ -9,6 +9,7 @@ use App\Http\Resources\VouncherRecordResource;
 use App\Http\Resources\VouncherResource;
 use App\Models\Product;
 use App\Models\Vouncher;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 
 class VouncherRecordsController extends Controller
@@ -38,6 +39,7 @@ class VouncherRecordsController extends Controller
         }
         $product->total_stock -= $request->quantity;
         $product->update();
+
         $VouncherRecord =   VouncherRecords::create([
             'vouncher_id' => $request->vouncher_id,
             'product_id' => $request->product_id,
@@ -45,10 +47,16 @@ class VouncherRecordsController extends Controller
             'quantity' => $request->quantity,
             'cost' => $cost
         ]);
+
         $vouncher =  $VouncherRecord->Vouncher;
+        // dd($vouncher);
+
         $vouncher->total +=  $VouncherRecord->cost;
         $vouncher->net_total = $vouncher->total  + ($vouncher->total * ($vouncher->tax / 100));
+
+
         $vouncher->update();
+
         return new  VouncherResource($vouncher);
     }
 

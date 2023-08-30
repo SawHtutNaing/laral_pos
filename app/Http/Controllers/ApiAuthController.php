@@ -9,6 +9,7 @@ use Illuminate\Auth\Events\Registered;
 
 
 use App\Models\User;
+use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,15 +73,17 @@ class ApiAuthController extends Controller
         ]);
     }
 
-    public function login(Request $request)
+
+    public  function login(Request $request)
     {
-        $request->validate([
+        $credentials =  $request->validate([
 
             'email' => 'required|email',
             'password' => 'required|min:3'
         ]);
 
-        $user = User::where('email', $request->email)->first();
+        $user = User::where('email', $credentials['email'])->first();
+
         if ($user->isBan) {
             return response()->json(
                 [
@@ -89,6 +92,8 @@ class ApiAuthController extends Controller
                 200
             );
         }
+
+
         if (!Auth::attempt($request->only('email', 'password'))) {
 
             return response()->json(
@@ -99,15 +104,29 @@ class ApiAuthController extends Controller
             );
         }
 
-        $token = Auth::user()->createToken("iphone");
+        // $token = Auth::user()->createToken("iphone");
 
-        return response()->json(
-            [
-                'token' =>  $token->plainTextToken,
-                'user' => Auth::user()
-            ],
-            200
-        );
+        // return response()->json(
+        //     [
+        //         'token' =>  $token->plainTextToken,
+        //         'user' => Auth::user()
+        //     ],
+        //     200
+        // );
+
+        try {
+            $userAgent = htmlentities($request->header('User-Agent'), ENT_QUOTES);
+
+            $user = auth()->user();
+            $token = $user->createToken($userAgent)->plainTextToken;
+        } catch (Exception $e) {
+            return $e;
+        }
+        return response()->json([
+            "message" => "Login successfully",
+            "token" => $token,
+            "user" => $user
+        ]);
     }
 
     public function logout(): JsonResponse

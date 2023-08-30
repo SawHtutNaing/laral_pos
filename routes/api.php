@@ -4,6 +4,7 @@ use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\BrandController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\RecentController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\VouncherController;
 use App\Http\Controllers\VouncherRecordsController;
@@ -32,10 +33,11 @@ Route::prefix('v1')->group(function () {
         'test',
         // fn () => Storage()
     );
-    Route::prefix('user')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 
         Route::post('register', [ApiAuthController::class, 'Register']);
         Route::apiResource('brand', BrandController::class);
+        Route::apiResource('recent', RecentController::class);
         // Route::delete('brand/{id}', 'BrandController@destroy')->middleware('isAdmin');
         Route::apiResource('product', ProductController::class);
         Route::apiResource('photo', PhotoController::class);
@@ -44,6 +46,7 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('stock', StockController::class);
         Route::apiResource('vouncher', VouncherController::class);
         Route::apiResource('vouncher-record', VouncherRecordsController::class);
+
         Route::get('devices', [ApiAuthController::class, 'devices']);
         Route::get('delete-account', [ApiAuthController::class, 'DeleteAccount']);
         Route::post('update/{id}', [ApiAuthController::class, 'Update']);
@@ -54,6 +57,7 @@ Route::prefix('v1')->group(function () {
         Route::post('new-pw', [ApiAuthController::class, 'newPw']);
         Route::get('logout', [ApiAuthController::class, 'logout']);
         Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
+        Route::get('close-sale', [RecentController::class, 'closeSale']);
     });
 
 

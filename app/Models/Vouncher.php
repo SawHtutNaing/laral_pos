@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Vouncher extends Model
 {
     use HasFactory;
-    protected $fillable = ["customer", "vouncher_number", "tax", "net_total", "user_id", "total"];
+    // protected $fillable = ["customer", "vouncher_number", "tax", "net_total", "user_id", "total"];
+    protected $guarded = [];
 
     public function children_vounchers()
     {

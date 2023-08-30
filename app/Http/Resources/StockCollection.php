@@ -14,10 +14,7 @@ class StockCollection extends ResourceCollection
      */
     public function toArray(Request $request): array
     {
-        dd(
-            $this->collection
 
-        );
         return [
             'stocks' => $this->collection
 
