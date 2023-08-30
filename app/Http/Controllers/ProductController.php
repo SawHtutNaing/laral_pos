@@ -50,7 +50,8 @@ class ProductController extends Controller
     public function store(StoreProductRequest $request)
 
     {
-        // return $request;
+
+
 
         $check = Product::where('name', $request->name)->where("brand_id", $request->brand_id)->first();
         if ($check) {
@@ -66,7 +67,7 @@ class ProductController extends Controller
 
         $photo = null;
         if ($request->hasFile('photo')) {
-            // dd("thisis");
+
             $fileExt =  $request->file('photo')->extension();
             $fileName = $request->file('photo')->getClientOriginalName();
             $savedProductPhoto =  asset(Storage::url($request->file('photo')->store("public/media")));
@@ -86,21 +87,25 @@ class ProductController extends Controller
 
 
 
-        $product =  Product::create(
-            [
-                "name" => $request->name,
-                "brand_id" => $request->brand_id,
-                "actually_price" => $request->actually_price,
-                "sales_price" => $request->sales_price,
-                "total_stock" => $request->total_stock,
-                "unit" => $request->unit,
-                "more_information" => $request->more_information,
-                "user_id" => Auth::id(),
-                "photo" => $photo->url,
+        try {
+            $product =  Product::create(
+                [
+                    "name" => $request->name,
+                    "brand_id" => $request->brand_id,
+                    "actually_price" => $request->actually_price,
+                    "sales_price" => $request->sales_price,
+                    "total_stock" => $request->total_stock,
+                    "unit" => $request->unit,
+                    "more_information" => $request->more_information,
+                    "user_id" => Auth::id(),
+                    "photo" => $photo->url,
 
 
-            ]
-        );
+                ]
+            );
+        } catch (Exception $e) {
+            return $e;
+        }
 
 
 
@@ -197,6 +202,7 @@ class ProductController extends Controller
 
     public function SaleProduct(Request $request)
     {
+
         if (Auth::user()->closed_time > Carbon::today()) {
             return 'sales is opened tomorrow';
         }

@@ -40,7 +40,7 @@ Route::prefix('v1')->group(function () {
 
         Route::post('register', [ApiAuthController::class, 'Register']);
         Route::apiResource('brand', BrandController::class);
-        Route::apiResource('recent', RecentController::class);
+        // Route::apiResource('recent', RecentController::class);
         // Route::delete('brand/{id}', 'BrandController@destroy')->middleware('isAdmin');
         Route::apiResource('product', ProductController::class);
         Route::apiResource('photo', PhotoController::class);
@@ -49,7 +49,6 @@ Route::prefix('v1')->group(function () {
         Route::apiResource('stock', StockController::class);
         Route::apiResource('vouncher', VouncherController::class);
         Route::apiResource('vouncher-record', VouncherRecordsController::class);
-
         Route::get('devices', [ApiAuthController::class, 'devices']);
         Route::get('delete-account', [ApiAuthController::class, 'DeleteAccount']);
         Route::post('update/{id}', [ApiAuthController::class, 'Update']);
@@ -61,9 +60,10 @@ Route::prefix('v1')->group(function () {
         Route::get('logout', [ApiAuthController::class, 'logout']);
         Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
         Route::get('close-sale', [RecentController::class, 'closeSale']);
+        Route::get('recent', [RecentController::class, 'index']);
         Route::apiResource('daily-report', DayilyRecord::class);
-        Route::apiResource('recent', MonthlyRecord::class);
-        Route::apiResource('recent', YearlyRecord::class);
+        Route::apiResource('montly-report', MonthlyRecord::class);
+        Route::apiResource('yearly-report', YearlyRecord::class);
     });
 
 

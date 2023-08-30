@@ -26,6 +26,7 @@ class RecentController extends Controller
     public function index()
     {
 
+
         $today = Carbon::today();
 
         try {
