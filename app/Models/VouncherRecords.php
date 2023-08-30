@@ -29,4 +29,10 @@ class VouncherRecords extends Model
         return $this->whereDate('created_at', $today)->sum('quantity');
         // ->where('user_id', Auth::id())
     }
+
+
+    
+
 }
+
+

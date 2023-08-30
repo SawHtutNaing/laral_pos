@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Product;
+use App\Models\User;
 use App\Models\Vouncher;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -29,7 +30,8 @@ class VouncherRecordsFactory extends Factory
             // 'product_id' => $product_id,
             'product_id' => Product::all()->random()->id,
             'quantity' => $quantity,
-            'cost' => ($each_cost * $quantity)
+            'cost' => ($each_cost * $quantity),
+            'user_id' => User::all()->random()->id
         ];
     }
 }

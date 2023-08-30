@@ -8,6 +8,9 @@ use App\Http\Controllers\RecentController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\VouncherController;
 use App\Http\Controllers\VouncherRecordsController;
+use App\Models\DayilyRecord;
+use App\Models\MonthlyRecord;
+use App\Models\YearlyRecord;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
@@ -33,7 +36,7 @@ Route::prefix('v1')->group(function () {
         'test',
         // fn () => Storage()
     );
-    Route::prefix('user')->group(function () {
+    Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 
         Route::post('register', [ApiAuthController::class, 'Register']);
         Route::apiResource('brand', BrandController::class);
@@ -58,6 +61,9 @@ Route::prefix('v1')->group(function () {
         Route::get('logout', [ApiAuthController::class, 'logout']);
         Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
         Route::get('close-sale', [RecentController::class, 'closeSale']);
+        Route::apiResource('daily-report', DayilyRecord::class);
+        Route::apiResource('recent', MonthlyRecord::class);
+        Route::apiResource('recent', YearlyRecord::class);
     });
 
 

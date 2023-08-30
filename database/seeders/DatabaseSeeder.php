@@ -22,7 +22,8 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             StockSeeder::class,
             VouncherSeeder::class,
-            VouncherRecordsSeeder::class
+            VouncherRecordsSeeder::class,
+            DayilyRecordSeeder::class
             // CategorySeeder::class,
         ]);
         // \App\Models\User::factory(10)->create();

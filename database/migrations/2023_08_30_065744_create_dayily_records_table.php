@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('month');
             $table->string('year');
             $table->string('total_sell');
-            $table->string('total_quantity');
-            $table->foreignId('user_id');
+            // $table->string('total_quantity');
+            // $table->foreignId('user_id');
             $table->timestamps();
         });
     }

@@ -15,6 +15,7 @@ use App\Models\VouncherRecords;
 use Exception;
 use GuzzleHttp\Psr7\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use PhpParser\Node\Stmt\TryCatch;
 
 class RecentController extends Controller
@@ -24,13 +25,16 @@ class RecentController extends Controller
      */
     public function index()
     {
-        // return "ffdfdf";
+
         $today = Carbon::today();
 
         try {
-            $records = Vouncher::where('user_id', Auth::id())->whereDate('created_at', $today)
-                ->with('children_vounchers')
-                ->get();
+            // my type
+            // $records = Vouncher::where('user_id', Auth::id())->whereDate('created_at', $today)
+            //     ->with('children_vounchers')
+            //     ->get();
+            $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
+            return  $records;
         } catch (Exception $e) {
             return $e;
         }
@@ -88,6 +92,7 @@ class RecentController extends Controller
     public function closeSale()
     {
 
+
         // $vouncherRecord = new VouncherRecords();
         // try {
         //     return $vouncherRecord->getTodayQuantity();
@@ -97,21 +102,31 @@ class RecentController extends Controller
         $vouncherRecord = new VouncherRecords();
 
         $dy = Carbon::now();
-        $dailyRecord =  DayilyRecord::create([
 
-            'day' => $dy->shortEnglishDayOfWeek,
-            'month' => $dy->shortEnglishMonth,
-            'year' => $dy->year,
-            'total_sell' => $vouncherRecord->getTodaySell(),
-            'total_quantity' => $vouncherRecord->getTodayQuantity(),
-            'user_id' => Auth::id()
+        try {
+            $dailyRecord =  DayilyRecord::create([
+
+                'day' => $dy->shortEnglishDayOfWeek,
+                'month' => $dy->shortEnglishMonth,
+                'year' => $dy->year,
+                'total_sell' => $vouncherRecord->getTodaySell(),
+                // 'total_quantity' => $vouncherRecord->getTodayQuantity(),
+                // 'user_id' => Auth::id()
+
+            ]);
+        } catch (Exception $e) {
+            return $e;
+        }
+
+        $user = User::findOrFail(Auth::id());
 
 
-        ]);
-
-        $user = User::where('id', Auth::id());
-        $user->closed_time = Carbon::tomorrow();
-        $user->update();
+        // $user->closed_time = Carbon::tomorrow();
+        try {
+            $user->update();
+        } catch (Exception $e) {
+            return $e;
+        }
         return $dailyRecord;
     }
 }

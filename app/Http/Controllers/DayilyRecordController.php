@@ -13,7 +13,7 @@ class DayilyRecordController extends Controller
      */
     public function index()
     {
-        //
+        return DayilyRecord::all();
     }
 
     /**

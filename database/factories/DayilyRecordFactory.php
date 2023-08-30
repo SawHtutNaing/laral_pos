@@ -16,6 +16,13 @@ class DayilyRecordFactory extends Factory
      */
     public function definition(): array
     {
+        //  $table->string('day');
+        // $table->string('month');
+        // $table->string('year');
+        // $table->string('total_sell');
+        // $table->string('total_quantity');
+        // $table->foreignId('user_id');
+
         return [
             //
         ];

@@ -236,8 +236,10 @@ class ProductController extends Controller
                 'vouncher_id' => $vouncher->id,
                 "product_id" => $each['product_id'],
                 "cost" => $product->sales_price,
-
-                "quantity" => $each['quantity']
+                "user_id" => Auth::id(),
+                "quantity" => $each['quantity'],
+                "created_at" => now(),
+                'updated_at' => now()
             ];
             // $vouncher->total +=  $vouncher_record->cost;
             $vouncher->total +=  $vouncher_record['cost'];
