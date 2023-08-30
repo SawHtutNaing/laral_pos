@@ -21,12 +21,39 @@ class Vouncher extends Model
     public  function getSellByDate($thatDay)
     {
 
-        return $this->where('user_id', Auth::id())->whereDate('created_at', $thatDay)->sum('net_total');
+        return $this->whereDate('created_at', $thatDay)->sum('net_total');
     }
 
-    public  function getQuantityByDate($thatDay)
+    // public  function getQuantityByDate($thatDay)
+    // {
+
+    //     return $this->where('user_id', Auth::id())->whereDate('created_at', $thatDay)->sum('quantity');
+    // }
+
+
+    //month
+
+    public  function getSellByMonth($thatMonth, $thatYear)
     {
 
-        return $this->where('user_id', Auth::id())->whereDate('created_at', $thatDay)->sum('quantity');
+
+        // return $this->where('user_id', Auth::id())->whereYear('created_at', $thatYear)->whereMonth('created_at', $thatMonth)->sum('net_total');
+        return $this->whereYear('created_at', $thatYear)->whereMonth('created_at', $thatMonth)->sum('net_total');
+        //up is for seeder only
+    }
+
+    // public  function getQuantityByMonth($thatMonth, $thatYear)
+    // {
+
+    //     return $this->where('user_id', Auth::id())->whereYear('created_at', $thatYear)->whereMonth('created_at', $thatMonth)->sum('quantity');
+    // }
+
+    public  function getSellByYear($thatYear)
+    {
+
+
+        // return $this->where('user_id', Auth::id())->whereYear('created_at', $thatYear)->whereMonth('created_at', $thatMonth)->sum('net_total');
+        return $this->whereYear('created_at', $thatYear)->sum('net_total');
+        //up is for seeder only
     }
 }

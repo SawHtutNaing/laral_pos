@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\BrandController;
+use App\Http\Controllers\DayilyRecordController;
+use App\Http\Controllers\MonthlyRecordController;
 use App\Http\Controllers\PhotoController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\RecentController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\VouncherController;
 use App\Http\Controllers\VouncherRecordsController;
+use App\Http\Controllers\YearlyRecordController;
 use App\Models\DayilyRecord;
 use App\Models\MonthlyRecord;
 use App\Models\YearlyRecord;
@@ -61,9 +64,9 @@ Route::prefix('v1')->group(function () {
         Route::get('logout-all', [ApiAuthController::class, 'logOutAll']);
         Route::get('close-sale', [RecentController::class, 'closeSale']);
         Route::get('recent', [RecentController::class, 'index']);
-        Route::apiResource('daily-report', DayilyRecord::class);
-        Route::apiResource('montly-report', MonthlyRecord::class);
-        Route::apiResource('yearly-report', YearlyRecord::class);
+        Route::apiResource('daily-report', DayilyRecordController::class);
+        Route::apiResource('montly-report', MonthlyRecordController::class);
+        Route::apiResource('yearly-report', YearlyRecordController::class);
     });
 
 

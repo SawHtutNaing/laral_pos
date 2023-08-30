@@ -13,7 +13,7 @@ class YearlyRecordController extends Controller
      */
     public function index()
     {
-        //
+        return YearlyRecord::all();
     }
 
     /**

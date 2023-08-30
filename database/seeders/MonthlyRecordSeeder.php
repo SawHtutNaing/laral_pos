@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\MonthlyRecord;
+use App\Models\Vouncher;
 use App\Models\VouncherRecords;
 use Carbon\Carbon;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -22,7 +23,7 @@ class MonthlyRecordSeeder extends Seeder
         $endDate = Carbon::create($endYear, 12, 31);
 
         $currentDate = $startDate->copy();
-        $vouncherRecord = new VouncherRecords();
+        $vouncher = new Vouncher();
         while ($currentDate->lte($endDate)) {
 
             $month = $currentDate->month;
@@ -32,8 +33,8 @@ class MonthlyRecordSeeder extends Seeder
 
                 'month' => $month,
                 'year' => $year,
-                'total_sell' => $vouncherRecord->getSellByDate(),
-                'total_quantity' => $vouncherRecord->getQuantityByDate()
+                'total_sell' => $vouncher->getSellByMonth($month, $year)
+                // 'total_quantity' => $vouncher->getQuantityByDate()
             ]);
 
 

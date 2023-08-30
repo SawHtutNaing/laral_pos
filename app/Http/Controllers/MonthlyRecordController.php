@@ -13,7 +13,7 @@ class MonthlyRecordController extends Controller
      */
     public function index()
     {
-        //
+        return MonthlyRecord::all();
     }
 
     /**

@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('monthly_records', function (Blueprint $table) {
             $table->id();
+            $table->string('month');
+            $table->string('year');
+            $table->string('total_sell');
             $table->timestamps();
         });
     }

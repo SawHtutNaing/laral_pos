@@ -13,6 +13,8 @@ return new class extends Migration
     {
         Schema::create('yearly_records', function (Blueprint $table) {
             $table->id();
+            $table->string('year');
+            $table->string('total_sell');
             $table->timestamps();
         });
     }
