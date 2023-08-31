@@ -39,6 +39,7 @@ Route::prefix('v1')->group(function () {
         'test',
         // fn () => Storage()
     );
+    // Route::middleware('auth:sanctum')->prefix('user')->group(function () {
     Route::middleware('auth:sanctum')->prefix('user')->group(function () {
 
         Route::post('register', [ApiAuthController::class, 'Register']);
@@ -65,6 +66,8 @@ Route::prefix('v1')->group(function () {
         Route::get('close-sale', [RecentController::class, 'closeSale']);
         Route::get('recent', [RecentController::class, 'index']);
         Route::apiResource('daily-report', DayilyRecordController::class);
+        Route::post('custom-date', [DayilyRecordController::class, 'customDate']);
+
         Route::apiResource('montly-report', MonthlyRecordController::class);
         Route::apiResource('yearly-report', YearlyRecordController::class);
     });

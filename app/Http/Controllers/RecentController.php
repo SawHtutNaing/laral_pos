@@ -25,7 +25,7 @@ class RecentController extends Controller
      */
     public function index()
     {
-
+        // return "hello bya";
 
         $today = Carbon::today();
 
@@ -34,6 +34,7 @@ class RecentController extends Controller
             // $records = Vouncher::where('user_id', Auth::id())->whereDate('created_at', $today)
             //     ->with('children_vounchers')
             //     ->get();
+            // $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->whereDate('created_at', $today)->groupBy('product_id')->get();
             $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
             return  $records;
         } catch (Exception $e) {
@@ -101,17 +102,16 @@ class RecentController extends Controller
         //     return $e;
         // }
         $vouncherRecord = new VouncherRecords();
-
         $dy = Carbon::now();
 
         try {
             $dailyRecord =  DayilyRecord::create([
 
-                'day' => $dy->shortEnglishDayOfWeek,
-                'month' => $dy->shortEnglishMonth,
+                'day' => $dy->day,
+                'month' => $dy->month,
                 'year' => $dy->year,
                 'total_sell' => $vouncherRecord->getTodaySell(),
-                // 'total_quantity' => $vouncherRecord->getTodayQuantity(),
+                'cash' => $vouncherRecord->getTodaySell() / 1.05,
                 // 'user_id' => Auth::id()
 
             ]);

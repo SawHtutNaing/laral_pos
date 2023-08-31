@@ -43,7 +43,6 @@ class VouncherRecordsController extends Controller
         $VouncherRecord =   VouncherRecords::create([
             'vouncher_id' => $request->vouncher_id,
             'product_id' => $request->product_id,
-
             'quantity' => $request->quantity,
             'cost' => $cost
         ]);

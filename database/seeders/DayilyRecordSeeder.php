@@ -36,6 +36,8 @@ class DayilyRecordSeeder extends Seeder
                 'month' => $month,
                 'year' => $year,
                 'total_sell' => $vouncher->getSellByDate($thatDay),
+                'cash' => $vouncher->getSellByDate($thatDay) / 1.05,
+
                 // 'total_quantity' => $vouncher->getQuantityByDate($thatDay)
                 // 'user_id' => User::all()->random()->id
             ]);

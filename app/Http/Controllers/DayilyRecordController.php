@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\DayilyRecord;
 use App\Http\Requests\StoreDayilyRecordRequest;
 use App\Http\Requests\UpdateDayilyRecordRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+
 
 class DayilyRecordController extends Controller
 {
@@ -63,5 +67,15 @@ class DayilyRecordController extends Controller
     public function destroy(DayilyRecord $dayilyRecord)
     {
         //
+    }
+    public function customDate(Request $request)
+    {
+        $year = $request->year;
+        $month = $request->month;
+        $date = $request->date;
+
+        $thatDay = Carbon::create($year, $month, $date);
+
+        return DayilyRecord::whereDate('created_at', $thatDay)->get();
     }
 }

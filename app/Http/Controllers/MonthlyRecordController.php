@@ -5,16 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\MonthlyRecord;
 use App\Http\Requests\StoreMonthlyRecordRequest;
 use App\Http\Requests\UpdateMonthlyRecordRequest;
+use Carbon\Carbon;
+use Illuminate\Http\Request;
+
+
 
 class MonthlyRecordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return MonthlyRecord::all();
+
+        if (
+            is_null($request->month)
+        ) {
+
+            return MonthlyRecord::all();
+        }
+
+        $year = Carbon::now()->year;
+
+
+        $month = $request->month;
+        return MonthlyRecord::whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
     }
+
+
 
     /**
      * Show the form for creating a new resource.
