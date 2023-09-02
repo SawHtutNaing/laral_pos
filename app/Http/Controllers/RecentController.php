@@ -35,7 +35,8 @@ class RecentController extends Controller
             //     ->with('children_vounchers')
             //     ->get();
             // $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->whereDate('created_at', $today)->groupBy('product_id')->get();
-            $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
+            $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(cost) /1.05 as total_cash'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
+
             return  $records;
         } catch (Exception $e) {
             return $e;
