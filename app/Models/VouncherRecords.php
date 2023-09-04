@@ -23,16 +23,17 @@ class VouncherRecords extends Model
         return $this->whereDate('created_at', $today)->sum('cost');
         // ->where('user_id', Auth::id())
     }
+
+    public  function getTodaySellOrginalCash()
+    {
+        $today = Carbon::today();
+        return $this->whereDate('created_at', $today)->sum('cost');
+        // ->where('user_id', Auth::id())
+    }
     public  function getTodayQuantity()
     {
         $today = Carbon::today();
         return $this->whereDate('created_at', $today)->sum('quantity');
         // ->where('user_id', Auth::id())
     }
-
-
-    
-
 }
-
-

@@ -22,14 +22,15 @@ class MonthlyRecordController extends Controller
             is_null($request->month)
         ) {
 
-            return MonthlyRecord::all();
+            return MonthlyRecord::latest('id')->paginate(12);
         }
 
-        $year = Carbon::now()->year;
+        $year = $request->year;
 
 
         $month = $request->month;
-        return MonthlyRecord::whereMonth('created_at', $month)->whereYear('created_at', $year)->get();
+
+        return MonthlyRecord::where('month', $month)->where('year', $year)->get();
     }
 
 

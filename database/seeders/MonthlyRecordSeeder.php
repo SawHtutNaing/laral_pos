@@ -19,8 +19,8 @@ class MonthlyRecordSeeder extends Seeder
         $startYear = 2023;
         $endYear = 2024;
 
-        $startDate = Carbon::create($startYear, 1, 1);
-        $endDate = Carbon::create($endYear, 12, 31);
+        $startDate = Carbon::create(2023, 1, 1);
+        $endDate = Carbon::now();
 
         $currentDate = $startDate->copy();
         $vouncher = new Vouncher();

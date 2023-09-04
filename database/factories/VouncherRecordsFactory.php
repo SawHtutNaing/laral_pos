@@ -21,7 +21,7 @@ class VouncherRecordsFactory extends Factory
     {
         $product_id =  Product::all()->random()->id;
         $each_cost = Product::findOrFail($product_id)->sales_price;
-        $quantity =  rand(10, 20);
+        $quantity =  rand(3, 5);
 
 
 
@@ -31,6 +31,7 @@ class VouncherRecordsFactory extends Factory
             'product_id' => Product::all()->random()->id,
             'quantity' => $quantity,
             'cost' => ($each_cost * $quantity),
+
             'user_id' => User::all()->random()->id
         ];
     }

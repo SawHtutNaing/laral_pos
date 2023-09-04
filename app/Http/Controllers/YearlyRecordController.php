@@ -5,15 +5,17 @@ namespace App\Http\Controllers;
 use App\Models\YearlyRecord;
 use App\Http\Requests\StoreYearlyRecordRequest;
 use App\Http\Requests\UpdateYearlyRecordRequest;
+use Illuminate\Http\Request;
 
 class YearlyRecordController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return YearlyRecord::all();
+        $year = $request->year;
+        return YearlyRecord::where('year', $year)->first();
     }
 
     /**

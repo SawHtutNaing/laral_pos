@@ -35,7 +35,7 @@ class RecentController extends Controller
             //     ->with('children_vounchers')
             //     ->get();
             // $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(quantity) as total_quantity'))->whereDate('created_at', $today)->groupBy('product_id')->get();
-            $records = VouncherRecords::select('product_id', DB::raw('SUM(cost) as total_cost'), DB::raw('SUM(cost) /1.05 as total_cash'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
+            $records = VouncherRecords::select('product_id', DB::raw('((SUM(cost) * 0.05) +SUM(cost) )  as total_cost'), DB::raw('SUM(cost) as total_cash'), DB::raw('SUM(quantity) as total_quantity'))->where('user_id', Auth::id())->whereDate('created_at', $today)->groupBy('product_id')->get();
 
             return  $records;
         } catch (Exception $e) {
@@ -107,12 +107,11 @@ class RecentController extends Controller
 
         try {
             $dailyRecord =  DayilyRecord::create([
-
                 'day' => $dy->day,
                 'month' => $dy->month,
                 'year' => $dy->year,
-                'total_sell' => $vouncherRecord->getTodaySell(),
-                'cash' => $vouncherRecord->getTodaySell() / 1.05,
+                'total_sell' => ($vouncherRecord->getTodaySell()  + ($vouncherRecord->getTodaySell() * 0.05)),
+                'cash' => $vouncherRecord->getTodaySell(),
                 // 'user_id' => Auth::id()
 
             ]);
